@@ -1,5 +1,11 @@
 # Spatial Visium 10x script for analysis with Bacterial Probes
 
+Script and tools used for the study:
+
+_Probe-based spatial host-pathogen genes expression to study bacterial pathogenesis and the regulation of bacterial virulence factors in tissue_
+
+Data available at:
+GSE242471
 
 ## Step 1: Desgin Probes
 
