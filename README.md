@@ -30,8 +30,9 @@ The ouptut will be put into the OUTPUT folder as Gene.tab
 
 ## Step 2: Spatial Visium10x preprocessing 
 
-Follow the 10x instructions to build you probe dataset and reference genome accordingly your new probes
-Follow Cellranger and 10x tutorial fro obtaining the preprocessed dataset
+Follow the 10xGenomics instructions to build you probe dataset and reference genome accordingly your new probes.
+
+Follow Spaceranger default instructions with the use of custom reference for obtaining the preprocessed dataset
 
 
 ## Step 3: Spatial data analysis using Seurat
