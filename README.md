@@ -2,7 +2,7 @@
 
 Script and tools used for the study:
 
-_Probe-based spatial host-pathogen genes expression to study bacterial pathogenesis and the regulation of bacterial virulence factors in tissue_
+_Dual host-bacterial gene expression to study pathogenesis and the regulation of virulence factors in tissue during respiratory infections_
 
 Data available at:
 GSE242471
