@@ -64,6 +64,7 @@ s4data@meta.data %>%
   mutate(c_n=as.integer(factor(seurat_clusters)),
          c_id=paste0(c_id,c_n)) %>% 
   ungroup() %>% 
+  mutate(c_id=plyr::mapvalues(c_id,c('C1','I2'),c('S6','S7'),warn_missing=F)) %>% 
   mutate(Clusters=(factor(c_id,levels=c(paste0('S',c(1:5)),'C1','I1','I2')))) %>% 
   column_to_rownames('spot')->s4data@meta.data
 
@@ -90,10 +91,11 @@ Cluster_palette=c('#d67d0f',
                   '#decc21',
                   '#62d1c6',
                   'grey',
-                  '#e60b0b',
-                  '#ed555f')
-
+                  '#92ccff',
+                  '#e60b0b')
+s=levels(s4data$Clusters)
 names(Cluster_palette)=s
+
 
 SpatialDimPlot(s4data,'Clusters',alpha=1,crop=F,pt.size.factor =1.5,combine=F,image.alpha = 0,stroke=0)->p
 
@@ -127,10 +129,13 @@ wrap_plots(
 
 # Heatmap -----------------------------------------------------------------
 
+
 s4data_markers %>% 
   group_by(cluster) %>% 
+  #slice_max(avg_log2FC,n=7)%>% 
   filter(!str_detect(gene,'^Hb')) %>% 
   select(gene,avg_log2FC,cluster) %>% 
+  
   spread(cluster,avg_log2FC) %>% 
   filter(gene%in%(s4data_markers %>%
                     filter(!str_detect(gene,'^Hb')) %>% 
@@ -139,6 +144,9 @@ s4data_markers %>%
   replace(is.na(.),0) %>% 
   column_to_rownames('gene')->mm
 
+
+
+colnames(mm)
 
 pheatmap(mm[s4data_markers %>%
               filter(!str_detect(gene,'^Hb')) %>% 
