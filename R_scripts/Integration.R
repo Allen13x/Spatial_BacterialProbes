@@ -97,11 +97,11 @@ for (i in s){
   
   norm_weights = as.matrix(sweep(results$weights, 1, rowSums(results$weights), '/'))
   norm_weights <- t(norm_weights)
-  ncol <- length(colnames(data)[!(colnames(data) %in% colnames(norm_weights))])
+  ncol <- length(colnames(s4_data[[i]])[!(colnames(s4_data[[i]]) %in% colnames(norm_weights))])
   if (ncol > 0) {
     tmp <- matrix(0, nrow = nrow(norm_weights), ncol = ncol)
-    colnames(tmp) <- colnames(data)[!(colnames(data) %in% colnames(norm_weights))]
-    norm_weights <- cbind(norm_weights, tmp)[,colnames(data)]
+    colnames(tmp) <- colnames(s4_data[[i]])[!(colnames(s4_data[[i]]) %in% colnames(norm_weights))]
+    norm_weights <- cbind(norm_weights, tmp)[,colnames(s4_data[[i]])]
   }
   
   s4_data[[i]][['RCTD']]<-CreateAssayObject(data = norm_weights)
