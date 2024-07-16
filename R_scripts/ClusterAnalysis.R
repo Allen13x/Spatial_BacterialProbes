@@ -54,18 +54,17 @@ s4data@meta.data %>%
   mutate(nn=n()) %>% 
   group_by(Infection,seurat_clusters) %>% 
   mutate(n=n(),
-         c_id=case_when((Infection=='CTRL'& n>0.9*nn)~'C',
-                        (Infection!='CTRL'& n>0.9*nn)~'I',
-                        (Infection=='CTRL'& n<0.1*nn)~'I',
-                        (Infection!='CTRL'& n<0.1*nn)~'C',
+         c_id=case_when((Infection=='CTRL'& n>0.85*nn)~'C',
+                        (Infection!='CTRL'& n>0.85*nn)~'I',
+                        (Infection=='CTRL'& n<0.15*nn)~'I',
+                        (Infection!='CTRL'& n<0.15*nn)~'C',
                         T~'S')) %>%
   ungroup() %>% 
   group_by(c_id) %>% 
   mutate(c_n=as.integer(factor(seurat_clusters)),
          c_id=paste0(c_id,c_n)) %>% 
   ungroup() %>% 
-  mutate(c_id=plyr::mapvalues(c_id,c('C1','I2'),c('S6','S7'),warn_missing=F)) %>% 
-  mutate(Clusters=(factor(c_id,levels=c(paste0('S',c(1:5)),'C1','I1','I2')))) %>% 
+  mutate(Clusters=(factor(c_id,levels=c(paste0('S',c(1:4)),'I1','I2','I3','C1')))) %>%
   column_to_rownames('spot')->s4data@meta.data
 
 
@@ -80,19 +79,23 @@ FindAllMarkers(s4data)->s4data_markers
 
 
 
-
 # Umap and plots ----------------------------------------------------------
 
 Idents(s4data)<-'Clusters'
 
-Cluster_palette=c('#d67d0f',
-                  '#60b038',
-                  '#9862d1',
-                  '#decc21',
-                  '#62d1c6',
-                  'grey',
-                  '#92ccff',
-                  '#e60b0b')
+
+Cluster_palette=c(
+  
+  '#d67d0f',
+  '#6bd408',
+  '#0897d4',
+  '#decc21',
+  '#e60b0b',
+  '#731024',
+  '#B08CA3',
+  'grey')
+
+
 s=levels(s4data$Clusters)
 names(Cluster_palette)=s
 
@@ -131,8 +134,8 @@ wrap_plots(
 
 
 s4data_markers %>% 
+  filter(cluster!='C1') %>% 
   group_by(cluster) %>% 
-  #slice_max(avg_log2FC,n=7)%>% 
   filter(!str_detect(gene,'^Hb')) %>% 
   select(gene,avg_log2FC,cluster) %>% 
   
@@ -149,7 +152,8 @@ s4data_markers %>%
 colnames(mm)
 
 pheatmap(mm[s4data_markers %>%
-              filter(!str_detect(gene,'^Hb')) %>% 
+              filter(!str_detect(gene,'^Hb'),
+                     cluster!='C1') %>% 
               group_by(cluster) %>%
               slice_max(avg_log2FC,n=7) %>% pull(gene),],
          cluster_rows = F,cluster_cols = F,
@@ -158,7 +162,7 @@ pheatmap(mm[s4data_markers %>%
          breaks = seq(-1,1,length.out=101),
          gaps_col = seq(0, 8),
          labels_row=s4data_markers %>%
-           filter(!str_detect(gene,'^Hb')) %>% 
+           filter(!str_detect(gene,'^Hb'), cluster!='C1') %>% 
            group_by(cluster) %>%
            slice_max(avg_log2FC,n=7) %>% pull(gene),
          show_colnames = F,
@@ -186,21 +190,27 @@ s4data@meta.data %>%
 
 
 df %>% 
+  rename(splitvar=splitvar1) %>% 
   group_by(splitvar,var,Infection) %>% 
+  
   mutate(perc=filter_lims(perc)) %>% 
+  filter(splitvar!='C1') %>% 
+  mutate(var=factor(var,levels=rev(c("Club cells","Alveolar epithelial cells","Endothelial cells","Fibroblast","Erythrocytes","Neutrophils","Monocytes","Macrophages","Dendritic cells","NK cells","B cells","T cells")))) %>% 
   ggplot(aes(x=var,y=perc)) +
-  geom_boxplot(aes(fill=var),na.rm = T,coef=7,lwd=0.5,show.legend = T)+
+  geom_boxplot(aes(fill=splitvar),na.rm = T,coef=7,lwd=0.5,show.legend = T)+
+  
   theme_classic()+
   ggtitle(str_to_title(str_replace_all(var,'_',' ')))+
   theme(legend.title = element_blank(),
         legend.position = 'bottom',
         axis.ticks.x = element_blank(),
-        axis.text.x=element_blank(),
         axis.text.y=element_text(size=10),
+        panel.spacing = unit(1, "lines"),
         axis.title = element_blank())+
   scale_y_continuous(labels = scales::percent)+
-facet_wrap(~splitvar,scales='fixed',ncol = 4)
-
+  scale_fill_manual(values=Cluster_palette) +
+  coord_flip()+
+  facet_wrap(~splitvar,scales='free_x',ncol = 4)
 
 
 
