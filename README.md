@@ -17,7 +17,7 @@ Script for importing data from spaceranger output and perform deconvolution and 
 Script for Cluster analysis, markers detection
 
 * InfectedTissueAnalysis.R:  
-Script for analysis of Infected tissues, markers detection and probes UMI counts
+Script for analysis of Infected tissues, markers detection, MABS+ vs MABS- analyses, and probes UMI counts
 
 * Markers.R:  
 Script for analysis of INOS, ROS, Hypoxia markers and probe location
