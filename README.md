@@ -1,4 +1,5 @@
 # Spatial Visium 10x script for analysis with Bacterial Probes
+[![DOI](https://zenodo.org/badge/703498692.svg)](https://zenodo.org/doi/10.5281/zenodo.13778548)
 
 Script and tools used for the study:
 
