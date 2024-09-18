@@ -2,7 +2,7 @@
 
 Script and tools used for the study:
 
-_Dual host-bacterial gene expression to study pathogenesis and the regulation of virulence factors in tissue during respiratory infections_
+_Dual Spatial Host-Bacterial Gene Expression in Mycobacterium abscessus Respiratory Infections_
 
 Data available at:
 GSE242471
