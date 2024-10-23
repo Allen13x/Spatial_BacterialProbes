@@ -5,6 +5,9 @@ Script and tools used for the study:
 
 _Dual Spatial Host-Bacterial Gene Expression in Mycobacterium abscessus Respiratory Infections_
 
+[Di Marco and Nicola et al., Communications Biology 2024](https://www.nature.com/articles/s42003-024-06929-5)
+
+
 Data available at:
 GSE242471
 
